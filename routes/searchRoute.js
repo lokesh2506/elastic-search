@@ -4,17 +4,28 @@ const router = express.Router();
 
 router.get('/:value', async (req, res) => {
     const { value } = req.params;
-    
+
     try {
         const response = await client.search({
             index: 'products-01',
             body: {
                 query: {
-                  wildcard: {
-                    "title": {
-                        value: `*${value}*`, 
+                    bool: {
+                        should: [
+                            {  // Full-text exact search
+                                match: {
+                                    "title": value
+                                }
+                            },
+                            {  // Partial search using wildcard (fuzzy matching as fallback)
+                                wildcard: {
+                                    "title": {
+                                        value: `*${value}*`
+                                    }
+                                }
+                            }
+                        ]
                     }
-                }
                 }
             }
         });
