@@ -12,12 +12,12 @@ router.get('/:value', async (req, res) => {
                 query: {
                     bool: {
                         should: [
-                            {  // Full-text exact search
+                            {  
                                 match: {
                                     "title": value
                                 }
                             },
-                            {  // Partial search using wildcard (fuzzy matching as fallback)
+                            {  
                                 wildcard: {
                                     "title": {
                                         value: `*${value}*`
